@@ -3,60 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered Buttons</title>
+    <title>Jordan Willis Portfolio</title>
+    <!-- Google Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
     <style>
         body {
+            margin: 0;
+            height: 100vh;
+			font-family: "DM Sans", sans-serif;
+			font-optical-sizing: auto;
+			font-weight: 400;
+			font-style: normal;
+            background-color: black;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            position: relative;
+        }
+
+        /* Video background styling */
+        .background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .background-video.active {
+            opacity: 1;
         }
 
         .container {
+            position: relative;
+            z-index: 1;
             text-align: center;
+            color: white;
         }
 
         .container h1 {
-            font-size: 36px;
-            margin-bottom: 20px;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .buttons button {
-            padding: 15px 30px;
-            font-size: 16px;
-            color: #888;
-            background-color: transparent;
-            border: 2px solid #888;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .buttons button:hover {
+            font-size: 44px;
+            margin-bottom: 40px;
             color: white;
-            background-color: black;
-            transform: scale(1.1);
+            text-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+               -2px 2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+                2px -2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+               -2px -2px 5px rgba(0, 0, 0, 0.7);   /* Drop shadow */
         }
+
+		.buttons {
+			display: flex;
+			justify-content: center; /* Center buttons horizontally */
+			align-items: center;     /* Center buttons vertically */
+			width: 100%;
+			max-width: 1200px;       /* Optional: restricts the maximum width */
+			margin: 0 auto;          /* Centers the buttons container */
+			gap: 20px;               /* Adds space between buttons */
+		}
+
+		.buttons button {
+			display: flex;
+			font-family: "Chakra Petch", sans-serif;
+			justify-content: center; /* Center text horizontally */
+			align-items: center;     /* Center text vertically */
+			padding: 20px 40px;      /* Increase padding to make buttons larger */
+			font-size: 38px;         /* Increase font size */
+			color: #888;
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			text-align: center;
+			color: white;
+			-webkit-text-stroke: 1px black; /* 1px black outline */
+			text-shadow: 
+				2px 2px 3px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+			   -2px 2px 3px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+				2px -2px 3px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+			   -2px -2px 3px rgba(0, 0, 0, 0.7);   /* Drop shadow */
+			white-space: nowrap;     /* Prevent text from wrapping */
+			min-width: 300px;        /* Set a minimum width to accommodate longer text */
+			transition: transform 0.3s ease;
+		}
+
+		/* Hover effect: Scale the hovered button and push others away */
+		.buttons button:hover {
+			color: white;
+			transform: scale(1.3);  /* Grow the hovered button */
+		}
+
+		/* Apply a translation to the buttons on either side of the hovered one */
+		.buttons button:hover ~ button,
+		.buttons button:hover ~ button ~ button,
+		.buttons button:hover ~ button ~ button ~ button {
+			transform: translateX(20px); /* Push buttons to the right */
+		}
+
+		/* Apply a translation to the buttons on the left of the hovered one */
+		.buttons button:hover ~ button:hover,
+		.buttons button:hover ~ button:hover ~ button {
+			transform: translateX(-20px); /* Push the left side buttons to the left */
+		}
     </style>
 </head>
 <body>
+    <!-- Preloaded videos -->
+    <video class="background-video" id="default-video" autoplay muted loop>
+        <source src="default.mp4" type="video/mp4">
+    </video>
+    <video class="background-video" id="game-dev-video" autoplay muted loop>
+        <source src="game-dev.mp4" type="video/mp4">
+    </video>
+    <video class="background-video" id="3d-artist-video" autoplay muted loop>
+        <source src="3d-artist.mp4" type="video/mp4">
+    </video>
+    <video class="background-video" id="video-editor-video" autoplay muted loop>
+        <source src="video-editor.mp4" type="video/mp4">
+    </video>
+    <video class="background-video" id="sound-designer-video" autoplay muted loop>
+        <source src="sound-designer.mp4" type="video/mp4">
+    </video>
+
     <div class="container">
-        <h1>Choose a Profession</h1>
+        <h1>Jordan Willis</h1>
         <div class="buttons">
-            <button>Game Developer</button>
-            <button>3D Artist</button>
-            <button>Video Editor</button>
-            <button>Sound Designer</button>
+            <button data-video="game-dev-video" onclick="window.location.href='game-dev.html'">Game Developer</button>
+			<button data-video="3d-artist-video" onclick="window.location.href='3d-artist.html'">3D Artist</button>
+			<button data-video="video-editor-video" onclick="window.location.href='video-editor.html'">Video Editor</button>
+			<button data-video="sound-designer-video" onclick="window.location.href='sound-designer.html'">Sound Designer</button>
         </div>
     </div>
+
+    <script>
+		const buttons = document.querySelectorAll('.buttons button');
+		const videos = document.querySelectorAll('.background-video');
+		const defaultVideo = document.getElementById('default-video');
+
+		// Ensure the default video starts playing and loops
+		defaultVideo.classList.add('active');
+		if (defaultVideo.paused) {
+			defaultVideo.play();
+		}
+
+		buttons.forEach(button => {
+			button.addEventListener('mouseenter', () => {
+				const videoId = button.getAttribute('data-video'); // Get video id from data-video attribute
+				videos.forEach(video => {
+					if (video.id === videoId) {
+						video.classList.add('active');
+						if (video.paused) {
+							video.play(); // Start the video if it's paused
+						}
+					} else {
+						video.classList.remove('active');
+					}
+				});
+			});
+
+			button.addEventListener('mouseleave', () => {
+				// Keep the default video active when no button is hovered
+				videos.forEach(video => {
+					if (video.id !== 'default-video') {
+						video.classList.remove('active');
+					}
+				});
+				const defaultVideo = document.getElementById('default-video');
+				defaultVideo.classList.add('active');
+				if (defaultVideo.paused) {
+					defaultVideo.play(); // Start the default video if it's paused
+				}
+			});
+		});
+    </script>
 </body>
 </html>
