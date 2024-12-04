@@ -1,7 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Buttons</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .container h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .buttons button {
+            padding: 15px 30px;
+            font-size: 16px;
+            color: #888;
+            background-color: transparent;
+            border: 2px solid #888;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buttons button:hover {
+            color: white;
+            background-color: black;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <div class="container">
+        <h1>Choose a Profession</h1>
+        <div class="buttons">
+            <button>Game Developer</button>
+            <button>3D Artist</button>
+            <button>Video Editor</button>
+            <button>Sound Designer</button>
+        </div>
+    </div>
 </body>
 </html>
