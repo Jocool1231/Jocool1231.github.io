@@ -25,13 +25,13 @@
     document.body.appendChild(renderer.domElement);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+    const ambientLight = new THREE.AmbientLight(0x404040, 1); // Lowered ambient light intensity
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
 
-    // Background Shader Material
+    // Background Shader Material (with more granular noise and darker color)
     const backgroundGeometry = new THREE.PlaneGeometry(100, 100);
     const backgroundMaterial = new THREE.ShaderMaterial({
       uniforms: {
@@ -49,8 +49,9 @@
         uniform float time;
         void main() {
           vec2 uv = vUv;
-          float clouds = sin((uv.x + time) * 10.0) * cos((uv.y + time) * 10.0);
-          gl_FragColor = vec4(0.0, 0.1, 0.2 + clouds * 0.1, 1.0);
+          // Increase noise frequency and add more detail
+          float noise = sin((uv.x + time) * 20.0) * cos((uv.y + time) * 20.0);
+          gl_FragColor = vec4(0.0, 0.0, 0.1 + noise * 0.1, 1.0); // Darker background color
         }
       `,
       side: THREE.DoubleSide,
@@ -62,13 +63,18 @@
 
     // Create the grid of cubes
     const cubeSize = 1;
-    const gap = 3; // Increased spacing between cubes
+    const gap = 3; // Spacing between cubes
     const gridSize = 15; // Larger grid to fill more of the screen
     const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const material = new THREE.MeshStandardMaterial({
+    const material = new THREE.MeshPhysicalMaterial({
       color: 0x88ccff,
-      roughness: 0.8,
+      roughness: 0.3,
       metalness: 0.2,
+      clearcoat: 1,
+      clearcoatRoughness: 0.1,
+      refractionRatio: 0.98, // Refractive property for the cubes
+      opacity: 0.9,
+      transparent: true,
     });
 
     const cubes = [];
@@ -83,10 +89,11 @@
 
     // Camera positioning
     camera.position.set(0, gridSize * 2, 0); // Higher to cover the grid
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0, 0, 0); // Ensure the camera is centered above the grid
 
-    // Animation
+    // Gentle Camera Sway
     const clock = new THREE.Clock();
+    const swayAmount = 0.5; // Gentle sway
     function animate() {
       requestAnimationFrame(animate);
 
@@ -94,6 +101,10 @@
 
       // Animate background
       backgroundMaterial.uniforms.time.value = time * 0.05;
+
+      // Apply gentle camera sway
+      camera.position.x = Math.sin(time * 0.1) * swayAmount; // Sway left/right gently
+      camera.position.z = gridSize * 2 + Math.cos(time * 0.1) * swayAmount; // Sway forward/backward gently
 
       // Smooth cube growth and shrink
       cubes.forEach((cube, i) => {
