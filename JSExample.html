@@ -87,11 +87,11 @@
       }
     }
 
-    // Camera positioning
+    // Camera positioning (centered above the grid)
     camera.position.set(0, gridSize * 2, 0); // Higher to cover the grid
     camera.lookAt(0, 0, 0); // Ensure the camera is centered above the grid
 
-    // Gentle Camera Sway
+    // Gentle Camera Sway (only in X and Z directions)
     const clock = new THREE.Clock();
     const swayAmount = 0.5; // Gentle sway
     function animate() {
@@ -102,7 +102,7 @@
       // Animate background
       backgroundMaterial.uniforms.time.value = time * 0.05;
 
-      // Apply gentle camera sway
+      // Apply gentle camera sway only on the X and Z axes
       camera.position.x = Math.sin(time * 0.1) * swayAmount; // Sway left/right gently
       camera.position.z = gridSize * 2 + Math.cos(time * 0.1) * swayAmount; // Sway forward/backward gently
 
