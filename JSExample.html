@@ -25,11 +25,14 @@
     document.body.appendChild(renderer.domElement);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 1); // Lowered ambient light intensity
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.5); // Lowered ambient light intensity
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
+
+    // Add Fog (using FogExp2 for exponential fade effect)
+    scene.fog = new THREE.FogExp2(0x000000, 0.02); // Black fog with exponential fading
 
     // Background Shader Material (with more granular noise and darker color)
     const backgroundGeometry = new THREE.PlaneGeometry(100, 100);
@@ -103,8 +106,8 @@
       backgroundMaterial.uniforms.time.value = time * 0.05;
 
       // Apply gentle camera sway only on the X and Z axes (Y stays fixed)
-      camera.position.x = Math.sin(time * 0.1) * swayAmount; // Sway left/right gently
-      camera.position.z = Math.cos(time * 0.1) * swayAmount; // Sway forward/backward gently
+      camera.position.x = Math.sin(time * 0.1) * swayAmount; // Gentle sway on x-axis
+      camera.position.z = Math.cos(time * 0.1) * swayAmount; // Gentle sway on z-axis
 
       // Smooth cube growth and shrink
       cubes.forEach((cube, i) => {
