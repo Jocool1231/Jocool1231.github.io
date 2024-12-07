@@ -24,6 +24,19 @@
             position: relative;
         }
 
+        p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            color: rgba(109, 109, 109, 0.8);
+			line-height: 0.05;
+			letter-spacing: 3px;
+            text-shadow: 
+				1px 1px 2px rgba(0, 0, 0, 0.4),   /* Drop shadow */
+               -1px 1px 2px rgba(0, 0, 0, 0.4),   /* Drop shadow */
+			    1px -1px 2px rgba(0, 0, 0, 0.4),   /* Drop shadow */
+               -1px -1px 2px rgba(0, 0, 0, 0.4);   /* Drop shadow */
+        }
+
         /* Video background styling */
         .background-video {
             position: absolute;
@@ -50,7 +63,7 @@
 
         .container h1 {
             font-size: 44px;
-            margin-bottom: 40px;
+            margin-bottom: 0px;
             color: white;
             text-shadow: 
                 2px 2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
@@ -134,12 +147,12 @@
 
     <div class="container">
         <h1>Jordan Willis</h1>
+		<p>A multidisciplinary artist...</p>
         <div class="buttons">
             <button data-video="game-dev-video" onclick="window.location.href='game-dev.html'">Game Developer</button>
 			<button data-video="3d-artist-video" onclick="window.location.href='3d-artist.html'">3D Artist</button>
 			<button data-video="video-editor-video" onclick="window.location.href='video-editor.html'">Video Editor</button>
 			<button data-video="sound-designer-video" onclick="window.location.href='sound-designer.html'">Sound Designer</button>
-			<button onclick="window.location.href='JSExample.html'">Testing</button>
         </div>
     </div>
 

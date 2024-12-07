@@ -27,7 +27,8 @@
 			padding: 10px;
 			border: 1px solid white;
 			border-radius: 0; /* Squared corners */
-			background-color: transparent;
+			background-color: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(10px);
 			max-width: 1000px; /* Limit horizontal width */
 		}
 
@@ -94,25 +95,55 @@
         }
 
         ul {
-            margin: 10px 0;
+            margin: 25px 0;
             padding-left: 20px;
         }
 
         ul li {
-            margin: 5px 0;
+            margin: 10px 0;
+			margin-top: 10px;
+            font-size: 20px;
+			color: rgb(255, 248, 235);
+			font-weight: 100;
+			text-shadow: 
+				3px 3px 4px hsla(24, 100%, 50%, 0.5),   /* Drop shadow */
+			   -3px 3px 4px hsla(24, 100%, 50%, 0.5),   /* Drop shadow */
+			    3px -3px 4px hsla(24, 100%, 50%, 0.5),   /* Drop shadow */
+			   -3px -3px 4px hsla(24, 100%, 50%, 0.5);   /* Drop shadow */
         }
 
         p {
-            margin-top: 10px;
-            font-size: 18px;
+            font-size: 20px;
+			text-shadow: 
+				2px 2px 2px rgba(0, 0, 0, 0.9),   /* Drop shadow */
+			   -2px 2px 2px rgba(0, 0, 0, 0.9),   /* Drop shadow */
+			    2px -2px 2px rgba(0, 0, 0, 0.9),   /* Drop shadow */
+			   -2px -2px 2px rgba(0, 0, 0, 0.9);   /* Drop shadow */
         }
 		
 		ph {
             margin-top: 10px;
-            font-size: 18px;
+            font-size: 20px;
 			color: orange;
 			font-weight: bold;
+			text-shadow: 
+				4px 4px 4px #ff66004d,   /* Drop shadow */
+			   -4px 4px 4px hsla(24, 100%, 50%, 0.3),   /* Drop shadow */
+			    4px -4px 4px hsla(24, 100%, 50%, 0.3),   /* Drop shadow */
+			   -4px -4px 4px hsla(24, 100%, 50%, 0.3);   /* Drop shadow */
         }
+
+		a {
+			margin-top: 10px;
+            font-size: 20px;
+			color: rgb(255, 100, 0);
+			font-weight: bold;
+			text-shadow: 
+				4px 4px 6px hsla(24, 100%, 50%, 0.3),   /* Drop shadow */
+			   -4px 4px 6px hsla(24, 100%, 50%, 0.3),   /* Drop shadow */
+			    4px -4px 6px hsla(24, 100%, 50%, 0.3),   /* Drop shadow */
+			   -4px -4px 6px hsla(24, 100%, 50%, 0.3);   /* Drop shadow */
+		}
 		
 		.button-list {
 			display: flex;
@@ -128,8 +159,8 @@
 			border: none;
 			color: grey;
 			cursor: pointer;
-			font-size: inherit;
-			margin: 0 10px;
+			font-size: 16;
+			margin: 0 5px;
 		}
 
 		.button-item:hover {
@@ -138,7 +169,7 @@
 		}
 
 		.separator {
-			margin: 0 10px;
+			margin: 0 5px;
 			color: grey;
 			font-weight: bold;
 		}
@@ -169,6 +200,20 @@
 			font-weight: 400;
 			font-style: normal;
         }
+
+		.description-container {
+			position: relative;
+			display: block;
+            z-index: 1;
+            text-align: left;
+            color: white;
+			padding-left: 20px;
+			padding-right: 20px;
+			font-family: "Ubuntu", sans-serif;
+			font-weight: 400;
+			font-style: normal;
+		}
+
 		/* Solid border */
 		hr.solid {
 		  border-top: 2px solid #bbb;
@@ -204,6 +249,8 @@
 			white-space: nowrap;     /* Prevent text from wrapping */
 			min-width: 300px;        /* Set a minimum width to accommodate longer text */
 			transition: transform 0.3s ease;
+			z-index: 5;
+			position: fixed;
 		}
 		
 		/* Hover effect: Scale the hovered button and push others away */
@@ -216,6 +263,36 @@
 		.buttons button:hover {
 			transform: translateX(40px); /* Push buttons to the right */
 		}
+		.bg-container iframe {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			border: none;
+			z-index: -1; /* Ensure it's behind the page content */
+		}
+		.blur-overlay {
+			position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.1); /* Optional: Adds semi-transparent white background */
+            backdrop-filter: blur(3px); /* Apply blur */
+            pointer-events: none; /* Allow interaction with iframe content */
+        }
+
+		.container h1 {
+            font-size: 42px;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 
+                2px 2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+               -2px 2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+                2px -2px 5px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+               -2px -2px 5px rgba(0, 0, 0, 0.7);   /* Drop shadow */
+        }
 		
     </style>
     <script>
@@ -228,14 +305,19 @@
     </script>
 </head>
 <body>
+	<div class="bg-container">
+		<iframe src="PortFolioBG.html" title="Background Blocks"></iframe>
+		<div class="blur-overlay"></div>
+	</div>
 	<div class="buttons">
 		<button class="back-button" onclick="window.location.href='index.html'">Back</button>
 	</div>
     <div class="container">
         <h1>GAME DEVELOPER</h1>
-        <p>I have been building my skills as a game developer for over a decade, through creating immersive game experiences and interactive stories. I am proficient in <ph>C#</ph>, <ph>C++</ph>, <ph>Unreal Engine</ph>, and <ph>Unity</ph>, I specialize in <ph>Gameplay Programming</ph>, <ph>UI Design/Implementation</ph>, <ph>Cinematics</ph>, and <ph>AI systems</ph>.</p> 
-		<p>As the founder of Team Kanohi, I have led the development of BIONICLE: Masks of Power, showcasing my expertise in project management and technical execution.</p>
-		<p>My diverse portfolio spanning action RPGs, VR experiences, and game jam projects, should speak for itself. In my dedication, creativity, and work ethic.</p>
+        <p>I have been building my skills as a game developer for over a decade, through creating immersive game experiences and interactive stories. 
+		<p>I am proficient in <ph>C#</ph>, <ph>C++</ph>, <ph>Unreal Engine 4 & 5</ph>, and <ph>Unity</ph>, I specialize in <ph>Gameplay Programming</ph>, <ph>UI Design/Implementation</ph>, <ph>Cinematics</ph>, and <ph>AI systems</ph>.</p>
+		<p>As the founder of <a href="https://masksofpower.com/team-kanohi">Team Kanohi</a>, I have led the development of BIONICLE: Masks of Power, showcasing my expertise in project management and technical execution.</p>
+		<p>My diverse portfolio spanning action RPGs, VR experiences, and many game jam projects, should speak for itself. In my dedication, creativity, and work ethic.</p>
 		<hr class="solid">
         <!-- Entry 1 BMOP -->
 		<div class="entry" id="entry-1">
@@ -254,11 +336,23 @@
 		 <div class="entry-content" id="content-1">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
+					<button class="button-item">Game Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Producer</button>
 					<span class="separator">|</span>
 					<button class="button-item">Programmer</button>
 					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Set Dresser</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -274,11 +368,20 @@
 					</iframe>
 				</div>
 				<ul>
-					<li>Key feature 1</li>
-					<li>Key feature 2</li>
-					<li>Key feature 3</li>
+					<li>Dynamic third-person melee combat system</li>
+					<li>Open-world level design with seamless transitions between regions</li>
+					<li>Many playable characters with differing stats and abilities</li>
+					<li>Advanced AI for enemy and friendly behavior, including life cycle schedules</li>
+					<li>Fully fledged quest/mission system</li>
+					<li>Cinematic back-and-forth dialogue system with branching choices</li>
+					<li>Modular progression mechanics, allowing player build customization</li>
+					<li>Collectibles, Cosmetics, and Bonuses!</li>
 				</ul>
-				<p>This is a description of the entry.</p>
+				<div class="description-container">
+					<p>I am the creator and director of Bionicle: Masks of Power, a fan-driven game developed with a large, global team of volunteers.</p>
+					<p>I am responsible for both the technical development and the direction of the project, overseeing everything from core mechanics to creative vision.</p>
+					<p>The game combines innovative combat, open exploration, and puzzle-solving, all set within a rich, 3D world inspired by the Bionicle universe.</p>
+				</div>
 			</div>
 		</div>
 		<!-- Entry 2 Legacy -->
@@ -295,11 +398,23 @@
 		 <div class="entry-content" id="content-2">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
+					<button class="button-item">Game Director</button>
 					<span class="separator">|</span>
 					<button class="button-item">Programmer</button>
 					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Set Dresser</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Generalist</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -336,11 +451,21 @@
 		 <div class="entry-content" id="content-3">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
+					<button class="button-item">Game Director</button>
 					<span class="separator">|</span>
 					<button class="button-item">Programmer</button>
 					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Generalist</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -377,11 +502,17 @@
 		 <div class="entry-content" id="content-4">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
-					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
-					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -418,11 +549,21 @@
 		 <div class="entry-content" id="content-5">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
+					<button class="button-item">Game Director</button>
 					<span class="separator">|</span>
 					<button class="button-item">Programmer</button>
 					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Generalist</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -459,11 +600,17 @@
 		 <div class="entry-content" id="content-6">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
-					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
-					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -500,11 +647,21 @@
 		 <div class="entry-content" id="content-7">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
+					<button class="button-item">Game Director</button>
 					<span class="separator">|</span>
 					<button class="button-item">Programmer</button>
 					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Generalist</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -541,11 +698,17 @@
 		 <div class="entry-content" id="content-8">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
-					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
-					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -582,11 +745,17 @@
 		 <div class="entry-content" id="content-9">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
-					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
-					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -623,11 +792,19 @@
 		 <div class="entry-content" id="content-10">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
-					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
+					<button class="button-item">Game Designer</button>
 					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -664,11 +841,19 @@
 		 <div class="entry-content" id="content-11">
 				<!-- Horizontal list of buttons -->
 				<div class="button-list">
-					<button class="button-item">Director</button>
-					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
+					<button class="button-item">Game Designer</button>
 					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
 				</div>
 
 				<!-- YouTube video -->
@@ -707,9 +892,19 @@
 				<div class="button-list">
 					<button class="button-item">Director</button>
 					<span class="separator">|</span>
-					<button class="button-item">Programmer</button>
+					<button class="button-item">Game Designer</button>
 					<span class="separator">|</span>
 					<button class="button-item">3d Artist</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Animator</button>
+					<span class="separator">|</span>
+					<button class="button-item">Sound Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">UI Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Level Designer</button>
+					<span class="separator">|</span>
+					<button class="button-item">Writer</button>
 				</div>
 
 				<!-- YouTube video -->
