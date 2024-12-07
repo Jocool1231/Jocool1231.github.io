@@ -71,7 +71,7 @@
     const material = new THREE.ShaderMaterial({
       uniforms: {
         cameraPosition: { value: camera.position },
-        maxDistance: { value: 50 }, // Maximum distance at which cubes fade out
+        maxDistance: { value: 50000 }, // Maximum distance at which cubes fade out
       },
       vertexShader: `
         varying vec3 vPosition;
@@ -87,7 +87,9 @@
         
         void main() {
           float distance = length(cameraPosition - vPosition);
+          // Clamp the opacity between 0 and 1 based on distance
           float opacity = 1.0 - smoothstep(0.0, maxDistance, distance); // Fades out based on distance
+          // Ensure that opacity does not go below 0 and the cube color is maintained
           gl_FragColor = vec4(0.53, 0.8, 1.0, opacity); // Cube color with distance-based opacity
         }
       `,
