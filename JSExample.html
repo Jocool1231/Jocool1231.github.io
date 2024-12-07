@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Three.js Foggy Cube Grid</title>
+  <title>PS2-Inspired Cube Grid</title>
   <style>
     body {
       margin: 0;
@@ -15,60 +15,95 @@
   </style>
 </head>
 <body>
-  <!-- Use unpkg CDN -->
   <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
   <script>
     // Scene, Camera, and Renderer
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Add Fog
-    scene.fog = new THREE.Fog(0x87CEEB, 10, 50); // Denser light blue fog
-
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
     scene.add(ambientLight);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
     directionalLight.position.set(5, 10, 7.5);
     scene.add(directionalLight);
 
+    // Background Shader Material
+    const backgroundGeometry = new THREE.PlaneGeometry(100, 100);
+    const backgroundMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+        time: { value: 0 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform float time;
+        void main() {
+          vec2 uv = vUv;
+          float clouds = sin((uv.x + time) * 10.0) * cos((uv.y + time) * 10.0);
+          gl_FragColor = vec4(0.0, 0.1, 0.2 + clouds * 0.1, 1.0);
+        }
+      `,
+      side: THREE.DoubleSide,
+    });
+    const backgroundPlane = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
+    backgroundPlane.position.set(0, 0, -50);
+    backgroundPlane.scale.set(2, 2, 1);
+    scene.add(backgroundPlane);
+
     // Create the grid of cubes
     const cubeSize = 1;
     const gap = 0.3;
-    const gridSize = 20; // Increased grid size for more cubes
+    const gridSize = 15;
     const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+    const material = new THREE.MeshPhysicalMaterial({
+      color: 0x88ccff,
+      transparent: true,
+      opacity: 0.5,
+      roughness: 0.5,
+      metalness: 0.1,
+    });
 
+    const cubes = [];
     for (let x = -gridSize / 2; x < gridSize / 2; x++) {
       for (let z = -gridSize / 2; z < gridSize / 2; z++) {
-        const height = Math.floor(Math.random() * 5) + 1; // Random stack height
-        for (let y = 0; y < height; y++) {
-          const cube = new THREE.Mesh(geometry, material);
-          cube.position.set(x * (cubeSize + gap), y * (cubeSize + gap), z * (cubeSize + gap));
-          scene.add(cube);
-        }
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set(x * (cubeSize + gap), 0, z * (cubeSize + gap));
+        scene.add(cube);
+        cubes.push(cube);
       }
     }
 
     // Camera positioning
-    camera.position.set(0, 30, 0); // Positioned above the grid
+    camera.position.set(0, 15, 15);
     camera.lookAt(0, 0, 0);
 
-    // Animate camera sway
+    // Animation
     const clock = new THREE.Clock();
     function animate() {
       requestAnimationFrame(animate);
 
-      // Subtle camera sway
       const time = clock.getElapsedTime();
-      camera.position.x = Math.sin(time * 0.5) * 5; // Reduced sway left and right
-      camera.position.z = Math.cos(time * 0.5) * 5; // Reduced sway forward and backward
-      camera.lookAt(0, 0, 0); // Always look towards the grid center
 
-      // Render the scene
+      // Animate background
+      backgroundMaterial.uniforms.time.value = time * 0.05;
+
+      // Animate cubes
+      cubes.forEach((cube, i) => {
+        const scale = Math.sin(time + i * 0.1) * 0.5 + 1.5;
+        cube.scale.set(1, scale, 1);
+      });
+
+      // Render scene
       renderer.render(scene, camera);
     }
 
