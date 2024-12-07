@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PS2-Inspired Cube Grid</title>
+  <title>PS2-Inspired Dynamic Cube Grid</title>
   <style>
     body {
       margin: 0;
@@ -56,35 +56,33 @@
       side: THREE.DoubleSide,
     });
     const backgroundPlane = new THREE.Mesh(backgroundGeometry, backgroundMaterial);
-    backgroundPlane.position.set(0, 0, -50);
-    backgroundPlane.scale.set(2, 2, 1);
+    backgroundPlane.rotation.x = -Math.PI / 2; // Rotate to face the camera
+    backgroundPlane.position.y = -5; // Slightly below the cubes
     scene.add(backgroundPlane);
 
     // Create the grid of cubes
     const cubeSize = 1;
-    const gap = 0.3;
     const gridSize = 15;
     const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
-    const material = new THREE.MeshPhysicalMaterial({
+    const material = new THREE.MeshStandardMaterial({
       color: 0x88ccff,
-      transparent: true,
-      opacity: 0.5,
-      roughness: 0.5,
-      metalness: 0.1,
+      roughness: 0.8,
+      metalness: 0.2,
     });
 
     const cubes = [];
-    for (let x = -gridSize / 2; x < gridSize / 2; x++) {
-      for (let z = -gridSize / 2; z < gridSize / 2; z++) {
-        const cube = new THREE.Mesh(geometry, material);
-        cube.position.set(x * (cubeSize + gap), 0, z * (cubeSize + gap));
-        scene.add(cube);
-        cubes.push(cube);
-      }
+    for (let i = 0; i < gridSize * gridSize; i++) {
+      const cube = new THREE.Mesh(geometry, material);
+      const x = (Math.random() - 0.5) * gridSize * 2; // Random spread
+      const z = (Math.random() - 0.5) * gridSize * 2;
+      const y = 0; // Start at the ground level
+      cube.position.set(x, y, z);
+      scene.add(cube);
+      cubes.push(cube);
     }
 
     // Camera positioning
-    camera.position.set(0, 15, 15);
+    camera.position.set(0, 30, 0); // Directly above the grid
     camera.lookAt(0, 0, 0);
 
     // Animation
@@ -99,8 +97,9 @@
 
       // Animate cubes
       cubes.forEach((cube, i) => {
-        const scale = Math.sin(time + i * 0.1) * 0.5 + 1.5;
-        cube.scale.set(1, scale, 1);
+        const height = Math.sin(time + i * 0.1) * 5 + Math.random() * 3 + 1; // Dynamic height with random variance
+        cube.scale.y = height;
+        cube.position.y = height / 2; // Adjust position to match new height
       });
 
       // Render scene
