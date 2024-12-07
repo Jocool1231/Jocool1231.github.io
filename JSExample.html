@@ -88,8 +88,8 @@
     }
 
     // Camera positioning (centered above the grid)
-    camera.position.set(0, gridSize * 2, 0); // Higher to cover the grid
-    camera.lookAt(0, 0, 0); // Ensure the camera is centered above the grid
+    camera.position.set(0, gridSize * 2, 0); // Keep fixed height above the grid
+    camera.lookAt(0, 0, 0); // Ensure the camera looks at the grid center
 
     // Gentle Camera Sway (only in X and Z directions)
     const clock = new THREE.Clock();
@@ -102,9 +102,9 @@
       // Animate background
       backgroundMaterial.uniforms.time.value = time * 0.05;
 
-      // Apply gentle camera sway only on the X and Z axes
+      // Apply gentle camera sway only on the X and Z axes (Y stays fixed)
       camera.position.x = Math.sin(time * 0.1) * swayAmount; // Sway left/right gently
-      camera.position.z = gridSize * 2 + Math.cos(time * 0.1) * swayAmount; // Sway forward/backward gently
+      camera.position.z = Math.cos(time * 0.1) * swayAmount; // Sway forward/backward gently
 
       // Smooth cube growth and shrink
       cubes.forEach((cube, i) => {
