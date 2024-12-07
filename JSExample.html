@@ -16,22 +16,17 @@
 </head>
 <body>
   <!-- Use unpkg CDN -->
-  <script type="module">
-    import * as THREE from 'https://unpkg.com/three@0.152.0/build/three.module.js';
-  </script>  
+  <script src="https://unpkg.com/three@0.152.0/build/three.min.js"></script>
   <script>
-    // Verify if THREE.js is loaded
-    console.log(THREE); // Should log the THREE object
-
     // Scene, Camera, and Renderer
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
     // Add Fog
-    scene.fog = new THREE.Fog(0x87CEEB, 30, 100); // Light blue fog
+    scene.fog = new THREE.Fog(0x87CEEB, 10, 50); // Denser light blue fog
 
     // Lighting
     const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft white light
@@ -43,7 +38,7 @@
     // Create the grid of cubes
     const cubeSize = 1;
     const gap = 0.3;
-    const gridSize = 10; // Number of cubes along one side
+    const gridSize = 20; // Increased grid size for more cubes
     const geometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
     const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
@@ -59,7 +54,7 @@
     }
 
     // Camera positioning
-    camera.position.set(10, 15, 40);
+    camera.position.set(0, 30, 0); // Positioned above the grid
     camera.lookAt(0, 0, 0);
 
     // Animate camera sway
@@ -67,10 +62,10 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Sway the camera
+      // Subtle camera sway
       const time = clock.getElapsedTime();
-      camera.position.x = Math.sin(time) * 10; // Sway left and right
-      camera.position.z = 40 + Math.cos(time) * 5; // Sway forward and backward
+      camera.position.x = Math.sin(time * 0.5) * 5; // Reduced sway left and right
+      camera.position.z = Math.cos(time * 0.5) * 5; // Reduced sway forward and backward
       camera.lookAt(0, 0, 0); // Always look towards the grid center
 
       // Render the scene
