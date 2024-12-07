@@ -4,61 +4,733 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Developer - Jordan Willis Portfolio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap" rel="stylesheet">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
-            height: 100vh;
-			font-family: "DM Sans", sans-serif;
-			font-optical-sizing: auto;
-			font-weight: 400;
-			font-style: normal;
-			color: white;
-            background-color: black;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-		
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 18px;
-            background-color: transparent;
+            padding: 20px;
+            font-family: "DM Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 400;
+            font-style: normal;
             color: white;
-            border: none;
-            cursor: pointer;
-            text-decoration: underline;
+            background-color: black;
+            overflow: auto;
+        }
+
+		.entry {
+			position: relative; /* Establish positioning context for the arrow */
+			margin: 40px auto;
+			padding: 10px;
+			border: 1px solid white;
+			border-radius: 0; /* Squared corners */
+			background-color: transparent;
+			max-width: 1000px; /* Limit horizontal width */
+		}
+
+		.entry-header {
+			display: flex;
+			align-items: center; /* Align items vertically */
+			position: relative;
+		}
+
+		.social-buttons {
+			margin-left: auto; /* Push social buttons to the far right */
+			display: flex;
+			gap: 10px; /* Space between buttons */
+		}
+
+		.social-buttons img {
+			width: 48px; /* Size of the icon */
+			height: 48px;
+			cursor: pointer;
+			transition: transform 0.3s ease; /* Optional hover effect */
+		}
+
+		.social-buttons img:hover {
+			transform: scale(1.1); /* Slight zoom on hover */
+		}
+
+		.arrow {
+			position: absolute;
+			left: -30px; /* Position the arrow just outside the box */
+			display: flex;
+			align-items: center; /* Keep the arrow aligned vertically */
+			height: 50px; /* Match the height of the logo */
+			transform: rotate(90deg); /* Default rotation for expanded state */
+			transition: transform 0.3s ease;
+			cursor: pointer;
+		}
+
+		.arrow.collapsed {
+			transform: rotate(0deg); /* Rotation for collapsed state */
+		}
+
+		.entry-content {
+			display: block;
+			margin-top: 10px;
+			text-align: left;
+		}
+
+		.entry-content.collapsed {
+			display: none;
+		}
+
+		.entry img {
+			max-width: 250px;
+			max-height: 250px; /* Logo size */
+			margin-right: 10px;
+		}
+
+        .entry video {
+            width: calc(100% - 20px); /* Fits the entry with padding */
+            margin: 10px auto;
+            display: block;
+            padding: 5px;
+            background-color: #000; /* Optional: to contrast the video against the entry */
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin: 5px 0;
+        }
+
+        p {
+            margin-top: 10px;
+            font-size: 18px;
         }
 		
+		ph {
+            margin-top: 10px;
+            font-size: 18px;
+			color: orange;
+			font-weight: bold;
+        }
+		
+		.button-list {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: grey;
+			font-size: 16px;
+			margin-bottom: 15px;
+		}
+
+		.button-item {
+			background: none;
+			border: none;
+			color: grey;
+			cursor: pointer;
+			font-size: inherit;
+			margin: 0 10px;
+		}
+
+		.button-item:hover {
+			color: white;
+			transform: scale(1.3);  /* Grow the hovered button */
+		}
+
+		.separator {
+			margin: 0 10px;
+			color: grey;
+			font-weight: bold;
+		}
+
+		/* Video container styles */
+		.video-container {
+			position: relative;
+			padding-bottom: 56.25%; /* Aspect ratio: 16:9 */
+			height: 0;
+			overflow: hidden;
+			margin-bottom: 20px;
+		}
+
+		.video-container iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
 		.container {
             position: relative;
             z-index: 1;
             text-align: center;
             color: white;
+			margin: 0;
+			font-family: "Ubuntu", sans-serif;
+			font-weight: 400;
+			font-style: normal;
         }
-		
+		/* Solid border */
+		hr.solid {
+		  border-top: 2px solid #bbb;
+		  margin: 40px;
+		}
 		.buttons {
 			display: flex;
-			justify-content: center; /* Center buttons horizontally */
-			align-items: center;     /* Center buttons vertically */
+			justify-content: left; /* Center buttons horizontally */
+			align-items: top;     /* Center buttons vertically */
 			width: 100%;
-			max-width: 1200px;       /* Optional: restricts the maximum width */
-			margin: 0 auto;          /* Centers the buttons container */
-			gap: 20px;               /* Adds space between buttons */
 		}
-        /* Additional page styles here */
+		
+		.buttons button {
+			display: flex;
+			font-family: "Chakra Petch", sans-serif;
+			justify-content: center; /* Center text horizontally */
+			align-items: center;     /* Center text vertically */
+			padding: 5px;      /* Increase padding to make buttons larger */
+			font-size: 34px;         /* Increase font size */
+			color: #888;
+			background-color: transparent;
+			border: dotted;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			text-align: center;
+			color: white;
+			-webkit-text-stroke: 1px black; /* 1px black outline */
+			text-shadow: 
+				2px 2px 3px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+			   -2px 2px 3px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+				2px -2px 3px rgba(0, 0, 0, 0.7),   /* Drop shadow */
+			   -2px -2px 3px rgba(0, 0, 0, 0.7);   /* Drop shadow */
+			white-space: nowrap;     /* Prevent text from wrapping */
+			min-width: 300px;        /* Set a minimum width to accommodate longer text */
+			transition: transform 0.3s ease;
+		}
+		
+		/* Hover effect: Scale the hovered button and push others away */
+		.buttons button:hover {
+			color: white;
+			transform: scale(1.1);  /* Grow the hovered button */
+			border: solid;
+		}
+
+		.buttons button:hover {
+			transform: translateX(40px); /* Push buttons to the right */
+		}
+		
     </style>
+    <script>
+        function toggleCollapse(entryId) {
+            const arrow = document.getElementById(`arrow-${entryId}`);
+            const content = document.getElementById(`content-${entryId}`);
+            arrow.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+    </script>
 </head>
 <body>
-    <button class="back-button" onclick="window.location.href='index.html'">Back</button>
-		<div class="container">
-			<h1>Game Developer</h1>
-			<p>Game development work goes here.</p>
-        </div>
-    </div>
+	<div class="buttons">
+		<button class="back-button" onclick="window.location.href='index.html'">Back</button>
+	</div>
+    <div class="container">
+        <h1>GAME DEVELOPER</h1>
+        <p>I have been building my skills as a game developer for over a decade, through creating immersive game experiences and interactive stories. I am proficient in <ph>C#</ph>, <ph>C++</ph>, <ph>Unreal Engine</ph>, and <ph>Unity</ph>, I specialize in <ph>Gameplay Programming</ph>, <ph>UI Design/Implementation</ph>, <ph>Cinematics</ph>, and <ph>AI systems</ph>.</p> 
+		<p>As the founder of Team Kanohi, I have led the development of BIONICLE: Masks of Power, showcasing my expertise in project management and technical execution.</p>
+		<p>My diverse portfolio spanning action RPGs, VR experiences, and game jam projects, should speak for itself. In my dedication, creativity, and work ethic.</p>
+		<hr class="solid">
+        <!-- Entry 1 BMOP -->
+		<div class="entry" id="entry-1">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-1" onclick="toggleCollapse(1)">▶</div>
+				<img src="./Assets/Images/BMOPLogo.png" alt="Bionicle: Masks of Power">
+				<div class="social-buttons">
+					<a href="https://masksofpower.com/" target="_blank">
+						<img src="./Assets/Images/website.png" alt="Website">
+					</a>
+					<a href="https://store.steampowered.com/app/1704850/BIONICLE_Masks_of_Power/" target="_blank">
+						<img src="./Assets/Images/steam.png" alt="Steam">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-1">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=2I5DR89qXdg" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 2 Legacy -->
+		<div class="entry" id="entry-2">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-2" onclick="toggleCollapse(2)">▶</div>
+				<img src="./Assets/Images/MOPLLogo.png" alt="Masks of Power: Legacy">
+				<div class="social-buttons">
+					<a href="https://jocool1231.itch.io/bionicle-masks-of-power" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-2">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=buHK2ifzbh8" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 3 Crimson Veil -->
+		<div class="entry" id="entry-3">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-3" onclick="toggleCollapse(3)">▶</div>
+				<img src="./Assets/Images/CVLogo.png" alt="Crimson Veil">
+				<div class="social-buttons">
+					<a href="https://jocool1231.itch.io/crimson-veil" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-3">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=VbxdldNFOts" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 4 Mech Encounter: Rise of the Blade -->
+		<div class="entry" id="entry-4">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-4" onclick="toggleCollapse(4)">▶</div>
+				<img src="./Assets/Images/MERoBLogo.png" alt="Mech Encounter: Rise of the Blade">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/mech-encounter-rise-of-the-blade" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-4">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=v7LLlwECD70" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 5 Battlestar Galactica Condition One -->
+		<div class="entry" id="entry-5">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-5" onclick="toggleCollapse(5)">▶</div>
+				<img src="./Assets/Images/BSGCOLogo.png" alt="Battlestar Galactica Condition One">
+				<div class="social-buttons">
+					<a href="https://jocool1231.itch.io/battlestar-galactica-condition-one" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-5">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=IxkNKm4G-zs" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 6 RADIOTOMB -->
+		<div class="entry" id="entry-6">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-6" onclick="toggleCollapse(6)">▶</div>
+				<img src="./Assets/Images/RTLogo.png" alt="RADIOTOMB">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/radiotomb" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-6">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 7 Train Trip-->
+		<div class="entry" id="entry-7">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-7" onclick="toggleCollapse(7)">▶</div>
+				<img src="./Assets/Images/TTLogo.png" alt="Train Trip">
+				<div class="social-buttons">
+					<a href="https://jocool1231.itch.io/train-trip" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-7">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=Uy1OD6bb_xw" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 8 Mech Encounter: Extraction-->
+		<div class="entry" id="entry-8">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-8" onclick="toggleCollapse(8)">▶</div>
+				<img src="./Assets/Images/MEELogo.png" alt="Mech Encounter: Extraction">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/mech-encounter-extraction" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-8">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 9 ATROPOS-->
+		<div class="entry" id="entry-9">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-9" onclick="toggleCollapse(9)">▶</div>
+				<img src="./Assets/Images/ATLogo.png" alt="ATROPOS">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/atropos" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-9">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=iQ3webYmySs" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 10 Mech Encounter: Flash Freeze-->
+		<div class="entry" id="entry-10">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-10" onclick="toggleCollapse(10)">▶</div>
+				<img src="./Assets/Images/MEFFLogo.png" alt="Mech Encounter: Flash Freeze">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/mech-encounter-flash-freeze" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-10">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="https://www.youtube.com/watch?v=EtLhlmOONaI" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 11 Mech Encounter-->
+		<div class="entry" id="entry-11">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-11" onclick="toggleCollapse(11)">▶</div>
+				<img src="./Assets/Images/MELogo.png" alt="Mech Encounter (Alpha)">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/mech-encounter" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-11">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
+		<!-- Entry 12 BLADE of TATEGA-->
+		<div class="entry" id="entry-12">
+			<div class="entry-header">
+				<div class="arrow" id="arrow-12" onclick="toggleCollapse(12)">▶</div>
+				<img src="./Assets/Images/BoTLogo.png" alt="BLADE of TATEGA">
+				<div class="social-buttons">
+					<a href="https://shrinedynamics.itch.io/blade-of-tatega" target="_blank">
+						<img src="./Assets/Images/itch.png" alt="Itch.io">
+					</a>
+				</div>
+			</div>
+		 <div class="entry-content" id="content-12">
+				<!-- Horizontal list of buttons -->
+				<div class="button-list">
+					<button class="button-item">Director</button>
+					<span class="separator">|</span>
+					<button class="button-item">Programmer</button>
+					<span class="separator">|</span>
+					<button class="button-item">3d Artist</button>
+				</div>
+
+				<!-- YouTube video -->
+				<div class="video-container">
+					<iframe 
+						width="560" 
+						height="315" 
+						src="" 
+						title="YouTube video player" 
+						frameborder="0" 
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+						allowfullscreen>
+					</iframe>
+				</div>
+				<ul>
+					<li>Key feature 1</li>
+					<li>Key feature 2</li>
+					<li>Key feature 3</li>
+				</ul>
+				<p>This is a description of the entry.</p>
+			</div>
+		</div>
 </body>
 </html>
