@@ -1,57 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Model Viewer</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torus Spinning with Emission and Smooth Scaling</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-  <script type="module">
-    // Correct path for 'three.js' and 'GLTFLoader.js'
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
-    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Create the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-    // Set up scene, camera, and renderer
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xeeeeee); // Set background color to light gray
-    document.body.appendChild(renderer.domElement);
+        // Add a simple light source for shading
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(10, 10, 10);
+        scene.add(light);
 
-    // Add stronger light
-    const light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(10, 10, 10);
-    scene.add(light);
+        // Add fog to the scene (distance fog effect, fading into black)
+        scene.fog = new THREE.FogExp2(0x000000, 0.02);  // Black color, and density for the fog
 
-    // Load the GLB model
-    const loader = new GLTFLoader();
-    loader.load(
-      './Assets/WebLogo.glb', // Replace with your actual path
-      (gltf) => {
-        const model = gltf.scene;
-        model.scale.set(1, 1, 1); // Adjust scale
-        model.position.set(0, 0, 0); // Center model
-        scene.add(model);
-      },
-      undefined, // Optional progress handler
-      (error) => {
-        console.error('Error loading model:', error);
-      }
-    );
+        // Create a function to instantiate the sphere and torus setup
+        function createSphereTorusPair(xPosition, zPosition) {
+            // Create the sphere with PBR material (white)
+            const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const sphereMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff,  // White color
+                roughness: 0.4,
+                metalness: 0.1,
+            });
+            const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+            sphere.position.set(xPosition, 0, zPosition);  // Position the sphere along x and z axes
+            scene.add(sphere);
 
-    camera.position.set(0, 1, 3); // Adjust camera position
+            // Create the torus with PBR material (white) and emissive orange
+            const torusGeometry = new THREE.TorusGeometry(3, 0.5, 16, 100);
+            const torusMaterial = new THREE.MeshStandardMaterial({
+                color: 0xffffff, // White color
+                roughness: 0.5,
+                metalness: 0.7,
+                emissive: 0xff5733, // Orange emissive color
+                emissiveIntensity: 0, // Initial emissive strength
+            });
+            const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+            torus.position.set(xPosition, 0, zPosition);  // Position the torus along x and z axes
+            scene.add(torus);
 
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
-    animate();
-  </script>
+            return { sphere, torus, material: torusMaterial };
+        }
+
+          // Create an array to store multiple sphere-torus pairs
+          const sphereTorusPairs = [];
+          const numRows = 7; // Increase the number of rows
+          const numColumns = 7; // Increase the number of columns
+          const spacingX = 10; // Space between columns (horizontal)
+          const spacingZ = 10; // Space between rows (depth)
+
+          // Create the original pair (closest to the camera)
+          const originalPair = createSphereTorusPair(0, 0);  // Original at the center
+
+          // Create multiple pairs in a grid layout, and progressively move them back along the z-axis
+          let zOffset = -10;  // Start position along the z-axis
+
+          for (let row = 0; row < numRows; row++) {
+              for (let col = 0; col < numColumns; col++) {
+                  // Skip the central instance (row 3, col 3 in a 7x7 grid)
+                  if (row === Math.floor(numRows / 2) && col === Math.floor(numColumns / 2)) {
+                      continue; // Skip this iteration
+                  }
+
+                  // Calculate x and z positions for each instance in the grid
+                  const xPosition = col * spacingX - (spacingX * (numColumns - 1)) / 2;  // Center the grid along the x-axis
+                  
+                  // The z-position is progressively further away depending on the distance from the center
+                  const distanceFromCenter = Math.max(Math.abs(row - Math.floor(numRows / 2)), Math.abs(col - Math.floor(numColumns / 2)));
+                  const zPosition = zOffset - distanceFromCenter * spacingZ;  // Move instances further along z based on distance from center
+                  
+                  // Create the pair at the calculated position
+                  const pair = createSphereTorusPair(xPosition, zPosition); 
+                  sphereTorusPairs.push(pair);
+              }
+              zOffset -= 10; // Move the grid further back with each row
+          }
+
+          // Position the camera
+          camera.position.z = 10; // Adjust camera to fit larger grid
+
+        // Random rotation speeds for smooth random rotation
+        const rotationSpeed = {
+            x: Math.random() * 0.05,
+            y: Math.random() * 0.05,
+            z: Math.random() * 0.05
+        };
+
+        // Sphere size adjustment on scroll (smooth with lerp)
+        let scale = 1;
+        const maxSphereSize = 2.3; // Clamped max size to prevent intersection
+        let targetScale = scale;
+        const lerpSpeed = 0.1;
+
+        window.addEventListener('wheel', (event) => {
+            // Adjust the scale based on scroll direction
+            if (event.deltaY > 0) {
+                targetScale += 0.1; // Scroll down to grow
+            } else {
+                targetScale -= 0.1; // Scroll up to shrink
+            }
+
+            // Clamp the size of the sphere to prevent intersection with the torus
+            targetScale = Math.min(Math.max(targetScale, 1), maxSphereSize);
+        });
+
+        // Smooth Lerp on Emissive Intensity Change
+        let emissiveIntensity = 0;
+        const maxEmissiveIntensity = 2.5; // Lowered maximum emissive intensity
+        let targetEmissiveIntensity = emissiveIntensity;
+
+        // Update the emissive intensity of the torus based on the sphere scale
+        function updateEmissiveIntensity(sphere, torusMaterial) {
+            const scaleFactor = (sphere.scale.x - 1) / (maxSphereSize - 1);
+            const newEmissiveIntensity = Math.min(Math.max(scaleFactor * maxEmissiveIntensity, 0), maxEmissiveIntensity);
+            torusMaterial.emissiveIntensity = THREE.MathUtils.lerp(torusMaterial.emissiveIntensity, newEmissiveIntensity, lerpSpeed);
+        }
+
+        // Update the sphere size smoothly with lerp
+        function updateSphereSize(pair) {
+            const scale = THREE.MathUtils.lerp(pair.sphere.scale.x, targetScale, lerpSpeed);
+            pair.sphere.scale.set(scale, scale, scale);
+        }
+
+        // Update the scene
+        function animate() {
+            // Smoothly rotate each torus with random speeds
+            sphereTorusPairs.forEach(pair => {
+                pair.torus.rotation.x += rotationSpeed.x;
+                pair.torus.rotation.y += rotationSpeed.y;
+                pair.torus.rotation.z += rotationSpeed.z;
+
+                // Update sphere size and emissive intensity for each pair
+                updateSphereSize(pair);
+                updateEmissiveIntensity(pair.sphere, pair.material);
+            });
+
+            // Update the original sphere and torus (in the center)
+            originalPair.torus.rotation.x += rotationSpeed.x;
+            originalPair.torus.rotation.y += rotationSpeed.y;
+            originalPair.torus.rotation.z += rotationSpeed.z;
+
+            // Update the sphere size and emissive intensity for the central pair
+            updateSphereSize(originalPair);
+            updateEmissiveIntensity(originalPair.sphere, originalPair.material);
+
+            // Render the scene
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+
+        // Start the animation loop
+        animate();
+
+        // Adjust the canvas size when the window is resized
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+
+    </script>
 </body>
 </html>
