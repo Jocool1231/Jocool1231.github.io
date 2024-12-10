@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Model Viewer</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script type="module">
+    // Correct path for 'three.js' and 'GLTFLoader.js'
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
+    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js';
+
+    // Set up scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xeeeeee); // Set background color to light gray
+    document.body.appendChild(renderer.domElement);
+
+    // Add stronger light
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(10, 10, 10);
+    scene.add(light);
+
+    // Load the GLB model
+    const loader = new GLTFLoader();
+    loader.load(
+      './Assets/WebLogo.glb', // Replace with your actual path
+      (gltf) => {
+        const model = gltf.scene;
+        model.scale.set(1, 1, 1); // Adjust scale
+        model.position.set(0, 0, 0); // Center model
+        scene.add(model);
+      },
+      undefined, // Optional progress handler
+      (error) => {
+        console.error('Error loading model:', error);
+      }
+    );
+
+    camera.position.set(0, 1, 3); // Adjust camera position
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
